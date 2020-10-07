@@ -1,0 +1,154 @@
+from Base import all
+
+##
+  PRIVATE
+  UPCOMING
+  UNSAFE
+
+  Creates a tag.
+
+  Expects tag name and its body as parameters.
+
+  > Example
+  Please take a look at definitions of HTML tags below.
+do_tag s ~body = 
+    b = State.run Text "" <|
+        body
+        State.get Text
+    tag = "<" + s + ">" + b + "<\\" + s + ">"
+    st = State.get Text
+    State.put Text (st + tag)
+
+
+
+##
+  UPCOMING
+  UNSAFE
+
+  HTML Element.
+html ~b = here.do_tag "html" b
+
+##
+  UPCOMING
+  UNSAFE
+
+  HTML Head.
+head ~b = here.do_tag "head" b
+
+##
+  UPCOMING
+  UNSAFE
+
+  Document's title.
+title ~b = here.do_tag "title" b
+
+##
+  UPCOMING
+  UNSAFE
+
+  Style.
+style ~b = here.do_tag "style" b
+
+##
+  UPCOMING
+  UNSAFE
+
+  HTML Body.
+body ~b = here.do_tag "body" b
+
+##
+  UPCOMING
+  UNSAFE
+
+  Div Element.
+div ~b = here.do_tag "div" b
+
+##
+  UPCOMING
+  UNSAFE
+
+  Bold.
+b ~t = here.do_tag "b" t
+
+##
+  UPCOMING
+  UNSAFE
+
+  Italic.
+i ~t = here.do_tag "i" t
+
+##
+  UPCOMING
+  UNSAFE
+
+  Underline.
+u ~t = here.do_tag "u" t
+
+
+
+##
+  UPCOMING
+  UNSAFE
+
+  Creates plain text.
+plain t =
+    st = State.get Text
+    State.put Text (st + t)
+
+
+
+##
+  UPCOMING
+  UNSAFE
+
+  Renders Enso to HTML.
+render ~html = State.run Text "" <|
+    html
+    State.get Text
+
+
+
+##
+  PRIVATE
+  TEST
+  UPCOMING
+  UNSAFE
+
+  Tests if Enso HTML renderer works correctly.
+
+  Creates a simple HTML site.
+my_html = Html <|
+    Head <|
+        Title <|
+            Plain '''
+                Foo
+    Body <|
+        Div <|
+            Plain '''
+                Foo
+            B <|
+                Plain '''
+                    Bar
+        Div <|
+            Plain '''
+                Baz
+
+##
+  PRIVATE
+  TEST
+  UPCOMING
+  UNSAFE
+
+  Tests if Enso HTML renderer works correctly.
+
+  Displays html file created from `my_html`.
+
+  ? Information
+  This library is under heavy development
+
+  > Example
+  Please look at definition of `my_html`.
+htmlTest = 
+    code = here.render here.my_html
+    IO.println code
+    code

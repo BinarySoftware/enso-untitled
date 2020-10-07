@@ -1,0 +1,43 @@
+from Base import all
+import Unnamed.Html
+
+## 
+  Optional values.
+
+  Type `Option` represents an optional value: every `Option` is either `Some`
+  and contains a value, or `None`, and does not.
+
+  ? Information
+  `Option`s are commonly paired with pattern matching to query the presence of
+  a value and take action, always accounting for the None case.
+
+  > Example
+    foo x y = x + y
+main = 
+    users = "[{\"id\":6,\"email\":\"\",\"password\":\"1234\",\"devices\":[{\"lastSeen\":\"0\",\"lastBattery\":\"0\",\"lastLocation\":{\"lon\":\"0.0\",\"lat\":\"0.0\"},\"name\":\"DEV_NAME\",\"details\":\"DEV_DETAILS\",\"uuid\":\"DEV_UUID\"}],\"username\":\"macko\"},{\"id\":2,\"email\":\"jnovak@LostFound.com\",\"password\":\"1234\",\"devices\":[{\"lastSeen\":\"0\",\"lastBattery\":\"0\",\"lastLocation\":{\"lon\":\"0.0\",\"lat\":\"0.0\"},\"name\":\"DEV_NAME\",\"details\":\"DEV_DETAILS\",\"uuid\":\"DEV_UUID\"},{\"lastSeen\":\"1568571700\",\"lastBattery\":\"75\",\"lastLocation\":{\"lon\":\"19.9449799\",\"lat\":\"50.0546501\"},\"details\":\"Specialized Roubaix\",\"name\":\"Bike 1\",\"uuid\":\"AOSAD239R2R3RKRNDS\"},{\"lastSeen\":\"1568571700\",\"lastBattery\":\"55\",\"lastLocation\":{\"lon\":\"19.9449799\",\"lat\":\"50.0646501\"},\"name\":\"Bike 2\",\"details\":\"Marin Gravel\",\"uuid\":\"AOSAD239R2R45FRDS\"}],\"username\":\"jnovak\"},{\"id\":1,\"email\":\"jkovalski@LostFound.com\",\"password\":\"1234\",\"devices\":[{\"details\":\"DEV_DETAILS\",\"lastBattery\":\"0\",\"lastLocation\":{\"lon\":\"0.0\",\"lat\":\"0.0\"},\"name\":\"DEV_NAME\",\"lastSeen\":\"0\",\"uuid\":\"DEV_UUID\"},{\"uuid\":\"AOSAD239R2KED934S\",\"lastBattery\":\"75\",\"lastLocation\":{\"lon\":\"19.3449799\",\"lat\":\"50.5646501\"},\"name\":\"Bike 1\",\"lastSeen\":\"1568571700\",\"details\":\"Specialized Tarmac\"},{\"lastSeen\":\"1568571700\",\"lastBattery\":\"55\",\"lastLocation\":{\"lon\":\"19.9449799\",\"lat\":\"50.0646501\"},\"name\":\"Bike 2\",\"details\":\"Specialized Stumpjumper\",\"uuid\":\"AOSAD239R2R3RKNSA\"},{\"name\":\"Bike 3\",\"lastBattery\":\"55\",\"lastLocation\":{\"lon\":\"19.5449799\",\"lat\":\"50.1646501\"},\"details\":\"Specialized Diverge\",\"lastSeen\":\"1568571700\",\"uuid\":\"AOSAD239R2R3FGDES\"}],\"username\":\"jkovalsky\"}]"
+    
+    mapExampleNY = "{longitude: -74,latitude: 40.76,controller: true,zoom:10,layers: [new deck.ScatterplotLayer({data: 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/scatterplot/manhattan.json',radiusScale: 10,radiusMinPixels: 0.5,getPosition: d => [d[0], d[1], 0],getColor: d => (d[2] === 1 ? [0, 128, 255] :  [255, 0, 128])})]}"
+
+    mapExampleGL = "{latitude: 49.254,longitude: -123.13,pitch: 45,zoom:9,controller: true,layers:[new deck.GeoJsonLayer({data: 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/geojson/vancouver-blocks.json',opacity: 0.6,stroked: false,filled: true,extruded: true,wireframe: true,fp64: true,getElevation: f => Math.sqrt(f.properties.valuePerSqm) * 10,getFillColor: f => [100, 100, 100],getLineColor: f => [255, 255, 255],pickable: true})]}"
+
+    scatterplotTest = """
+        {"axis" : {"x" : { "label" : "x-axis label", "scale" : "linear" }, "y" : { "label" : "y-axis label", "scale" : "linear" }},
+        "focus" : { "x" : 0.3, "y" : 0.55, "zoom" : 0.9 },
+        "points" : {"labels" : "visible"},
+        "data" : [
+            { "x" : 0.1, "y" : 0.7, "label" : "foo", "color" : "ff0000", "shape" : "circle", "size" : 0.2 },
+            { "x" : 0.2, "y" : 0.6, "label" : "bar", "color" : "00ff00", "shape" : "square", "size" : 0.3 },
+            { "x" : 0.3, "y" : 0.4, "label" : "baz", "color" : "0000ff", "shape" : "square", "size" : 0.5 },
+            { "x" : 0.5, "y" : 0.4, "label" : "bao", "color" : "f0000f", "shape" : "triangle", "size" : 0.4 }
+        ]}
+    histogramTest = """
+        {"axis" : {"x" : { "label" : "s" }, "y" : { "label" : "quantity" }},
+        "data" : [
+            { "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.2 },{ "x" : 0.3 },{ "x" : 0.3 },{ "x" : 0.3 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.5 },{ "x" : 0.6 },{ "x" : 0.7 }
+        ]}
+    Html.htmlTest
+
+
+#### METADATA ####
+[[{"index":{"value":0},"size":{"value":4}},"47ed7fb6-69a7-4c06-b637-fb8c3157f347"],[{"index":{"value":5},"size":{"value":4}},"67f3215e-5ba0-4f12-a564-7a5c7d6b9412"],[{"index":{"value":0},"size":{"value":9}},"b4fe2023-d323-47d8-9dbc-9fdbd947d398"],[{"index":{"value":17},"size":{"value":3}},"512dd49d-de35-453e-b2ff-9f05619f3f02"],[{"index":{"value":10},"size":{"value":10}},"fa3952c5-eb92-46c6-8a20-1fbce82ea84d"],[{"index":{"value":0},"size":{"value":20}},"09fbd7fa-784a-46e9-a1a1-b7073a60ee2a"],[{"index":{"value":22},"size":{"value":4}},"11a30897-771c-45ae-8583-4cb29067db45"],[{"index":{"value":27},"size":{"value":1}},"429f0fa9-3a0c-44b1-9fd4-35ebb7aaf019"],[{"index":{"value":34},"size":{"value":15}},"6be68391-8fd8-4233-a210-aa3bae70cc05"],[{"index":{"value":50},"size":{"value":1}},"11034324-9d58-4862-82ff-e6bd4cdaa312"],[{"index":{"value":52},"size":{"value":256}},"21fbbc39-5fe5-4e73-aa40-86ace2d99079"],[{"index":{"value":34},"size":{"value":274}},"8ee206ca-d883-46c2-9457-8aa6359ba0be"],[{"index":{"value":313},"size":{"value":3}},"bf7a5aeb-caaa-4a27-9568-b78891f07a08"],[{"index":{"value":317},"size":{"value":1}},"e09c56f4-4925-44a0-85ed-923f17a8c09f"],[{"index":{"value":319},"size":{"value":2}},"639237d6-f287-4911-a317-1c4f7c2edba7"],[{"index":{"value":321},"size":{"value":1}},"d086185b-4e5f-4aac-8433-15a6a1801a95"],[{"index":{"value":322},"size":{"value":7}},"55aacbb1-548b-4930-9011-0c3c54b8b940"],[{"index":{"value":319},"size":{"value":10}},"fcb4e43e-93f4-435f-b91c-3ed4c693dac4"],[{"index":{"value":330},"size":{"value":15}},"6be68391-8fd8-4233-a210-aa3bae70cc05"],[{"index":{"value":319},"size":{"value":26}},"47120930-a044-4122-b561-d428564640b3"],[{"index":{"value":313},"size":{"value":32}},"9693c07c-09d2-4ffb-9be5-801176049cde"],[{"index":{"value":29},"size":{"value":316}},"76676266-bd0a-4a33-8544-ae725435bb93"],[{"index":{"value":22},"size":{"value":323}},"474d6b21-d679-4681-b7e5-6e2085ad2ed3"]]
+{"ide":{"node":{"aeef377c-5d20-4bb6-a864-cd3395bdf38a":{"position":{"vector":[-63.0,81.0]},"intended_method":null},"e7340276-886f-4649-8dfc-356d1f45d89b":{"position":{"vector":[63.0,40.0]},"intended_method":null},"21fbbc39-5fe5-4e73-aa40-86ace2d99079":{"position":{"vector":[-308.0,361.0]},"intended_method":null},"811a4888-57db-4bb0-b49b-b1d42cf98434":{"position":{"vector":[-220.0,80.999916]},"intended_method":null},"9693c07c-09d2-4ffb-9be5-801176049cde":{"position":{"vector":[59.249893,354.0]},"intended_method":null}}}}

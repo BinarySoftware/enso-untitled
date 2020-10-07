@@ -1,0 +1,8 @@
+mapExample = 
+    mapExampleSmol = "{latitude: 37.8, longitude: -122.45, zoom: 10, mapStyle: 'mapbox://styles/mapbox/light-v9'}"
+
+    mapExampleSP = "{latitude:37.8,longitude:-122.45,zoom:12,controller:true,layers:[new deck.ScatterplotLayer({data:[{position: [-122.44, 37.8], color: [255, 0, 0], radius: 100},{position: [-122.45, 37.8], color: [0, 255, 0], radius: 100},{position: [-122.46, 37.8], color: [0, 0, 255], radius: 100}],getColor:d => d.color,getRadius:d => d.radius})]}"
+
+    mapExampleNY = "{longitude: -74,latitude: 40.76,controller: true,zoom:10,layers: [new deck.ScatterplotLayer({data: 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/scatterplot/manhattan.json',radiusScale: 10,radiusMinPixels: 0.5,getPosition: d => [d[0], d[1], 0],getColor: d => (d[2] === 1 ? [0, 128, 255] :  [255, 0, 128])})]}"
+
+    mapExampleGL = "{latitude: 49.254,longitude: -123.13,pitch: 45,zoom:9,controller: true,layers:[new deck.GeoJsonLayer({data: 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/geojson/vancouver-blocks.json',opacity: 0.6,stroked: false,filled: true,extruded: true,wireframe: true,fp64: true,getElevation: f => Math.sqrt(f.properties.valuePerSqm) * 10,getFillColor: f => [100, 100, 100],getLineColor: f => [255, 255, 255],pickable: true})]}"
