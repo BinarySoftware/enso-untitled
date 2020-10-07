@@ -19,15 +19,111 @@ do_tag name attrs ~body =
     st = State.get Html_Body
     State.put Html_Body (st.append t)
 
-html attrs ~body = here.do_tag "html" attrs body
-
-head attrs ~body = here.do_tag "head" attrs body
-
-body attrs ~body = here.do_tag "body" attrs body
-
-title attrs ~body = here.do_tag "title" attrs body
-
-div attrs ~body = here.do_tag "div" attrs body
+abbr           attrs ~body = here.do_tag "abbr       " attrs body
+address        attrs ~body = here.do_tag "address    " attrs body
+area           attrs ~body = here.do_tag "area       " attrs body
+a              attrs ~body = here.do_tag "a          " attrs body
+article        attrs ~body = here.do_tag "article    " attrs body
+aside          attrs ~body = here.do_tag "aside      " attrs body
+audio          attrs ~body = here.do_tag "audio      " attrs body
+b              attrs ~body = here.do_tag "b          " attrs body
+base           attrs ~body = here.do_tag "base       " attrs body
+bdo            attrs ~body = here.do_tag "bdo        " attrs body
+blockquote     attrs ~body = here.do_tag "blockquote " attrs body
+body           attrs ~body = here.do_tag "body       " attrs body
+br                         = here.do_tag "br         " [] []
+button         attrs ~body = here.do_tag "button     " attrs body
+canvas         attrs ~body = here.do_tag "canvas     " attrs body
+caption        attrs ~body = here.do_tag "caption    " attrs body
+cite           attrs ~body = here.do_tag "cite       " attrs body
+code           attrs ~body = here.do_tag "code       " attrs body
+col            attrs ~body = here.do_tag "col        " attrs body
+colgroup       attrs ~body = here.do_tag "colgroup   " attrs body
+command        attrs ~body = here.do_tag "command    " attrs body
+comment              ~body = here.do_tag "comment    " [] body
+datalist       attrs ~body = here.do_tag "datalist   " attrs body
+dd             attrs ~body = here.do_tag "dd         " attrs body
+del            attrs ~body = here.do_tag "del        " attrs body
+details        attrs ~body = here.do_tag "details    " attrs body
+div            attrs ~body = here.do_tag "div        " attrs body
+dfn            attrs ~body = here.do_tag "dfn        " attrs body
+dl             attrs ~body = here.do_tag "dl         " attrs body
+dt             attrs ~body = here.do_tag "dt         " attrs body
+em             attrs ~body = here.do_tag "em         " attrs body
+embed          attrs ~body = here.do_tag "embed      " attrs body
+fieldset       attrs ~body = here.do_tag "fieldset   " attrs body
+figcaption     attrs ~body = here.do_tag "figcaption " attrs body
+figure         attrs ~body = here.do_tag "figure     " attrs body
+footer         attrs ~body = here.do_tag "footer     " attrs body
+form           attrs ~body = here.do_tag "form       " attrs body
+h1             attrs ~body = here.do_tag "h1         " attrs body
+h2             attrs ~body = here.do_tag "h2         " attrs body
+h3             attrs ~body = here.do_tag "h3         " attrs body
+h4             attrs ~body = here.do_tag "h4         " attrs body
+h5             attrs ~body = here.do_tag "h5         " attrs body
+h6             attrs ~body = here.do_tag "h6         " attrs body
+header         attrs ~body = here.do_tag "header     " attrs body
+head           attrs ~body = here.do_tag "head       " attrs body
+hr                         = here.do_tag "hr         " [] []
+html           attrs ~body = here.do_tag "html       " attrs body
+i              attrs ~body = here.do_tag "i          " attrs body
+iframe         attrs ~body = here.do_tag "iframe     " attrs body
+img            attrs ~body = here.do_tag "img        " attrs body
+input          attrs ~body = here.do_tag "input      " attrs body
+ins            attrs ~body = here.do_tag "ins        " attrs body
+kbd            attrs ~body = here.do_tag "kbd        " attrs body
+label          attrs ~body = here.do_tag "label      " attrs body
+legend         attrs ~body = here.do_tag "legend     " attrs body
+li             attrs ~body = here.do_tag "li         " attrs body
+link           attrs ~body = here.do_tag "link       " attrs body
+map            attrs ~body = here.do_tag "map        " attrs body
+mark           attrs ~body = here.do_tag "mark       " attrs body
+menu           attrs ~body = here.do_tag "menu       " attrs body
+meta           attrs ~body = here.do_tag "meta       " attrs body
+meter          attrs ~body = here.do_tag "meter      " attrs body
+nav            attrs ~body = here.do_tag "nav        " attrs body
+noscript       attrs ~body = here.do_tag "noscript   " attrs body
+object         attrs ~body = here.do_tag "object     " attrs body
+ol             attrs ~body = here.do_tag "ol         " attrs body
+optgroup       attrs ~body = here.do_tag "optgroup   " attrs body
+option         attrs ~body = here.do_tag "option     " attrs body
+output         attrs ~body = here.do_tag "output     " attrs body
+p              attrs ~body = here.do_tag "p          " attrs body
+param          attrs ~body = here.do_tag "param      " attrs body
+pre            attrs ~body = here.do_tag "pre        " attrs body
+progress       attrs ~body = here.do_tag "progress   " attrs body
+q              attrs ~body = here.do_tag "q          " attrs body
+rp             attrs ~body = here.do_tag "rp         " attrs body
+rt             attrs ~body = here.do_tag "rt         " attrs body
+ruby           attrs ~body = here.do_tag "ruby       " attrs body
+s              attrs ~body = here.do_tag "s          " attrs body
+samp           attrs ~body = here.do_tag "samp       " attrs body
+script         attrs ~body = here.do_tag "script     " attrs body
+section        attrs ~body = here.do_tag "section    " attrs body
+select         attrs ~body = here.do_tag "select     " attrs body
+small          attrs ~body = here.do_tag "small      " attrs body
+source         attrs ~body = here.do_tag "source     " attrs body
+span           attrs ~body = here.do_tag "span       " attrs body
+strong         attrs ~body = here.do_tag "strong     " attrs body
+style          attrs ~body = here.do_tag "style      " attrs body
+sub            attrs ~body = here.do_tag "sub        " attrs body
+sup            attrs ~body = here.do_tag "sup        " attrs body
+table          attrs ~body = here.do_tag "table      " attrs body
+tbody          attrs ~body = here.do_tag "tbody      " attrs body
+td             attrs ~body = here.do_tag "td         " attrs body
+textarea       attrs ~body = here.do_tag "textarea   " attrs body
+tfoot          attrs ~body = here.do_tag "tfoot      " attrs body
+th             attrs ~body = here.do_tag "th         " attrs body
+thead          attrs ~body = here.do_tag "thead      " attrs body
+time           attrs ~body = here.do_tag "time       " attrs body
+title          attrs ~body = here.do_tag "title      " attrs body
+tr             attrs ~body = here.do_tag "tr         " attrs body
+track          attrs ~body = here.do_tag "track      " attrs body
+u              attrs ~body = here.do_tag "u          " attrs body
+ul             attrs ~body = here.do_tag "ul         " attrs body
+var            attrs ~body = here.do_tag "var        " attrs body
+video          attrs ~body = here.do_tag "video      " attrs body
+wbr                        = here.do_tag "wbr        " [] []
 
 plain t =
     st = State.get Html_Body
@@ -44,6 +140,14 @@ my_html = Html ["x" :> "y"] <|
                 Title of my awesome website!
     Body ["class" :> "main", "id" :> "boo"] <|
         Div [] <|
+            Table [] <|
+                Tr [] <|
+                    Th [] <|
+                        Plain '''
+                            Foo
+                    Td [] <|
+                        Plain '''
+                            Bar
             Plain '''
                 First div on the website!
         Div [] <|
