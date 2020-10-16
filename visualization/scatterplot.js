@@ -27,6 +27,8 @@ const label_style = "font-family: DejaVuSansMonoBook; font-size: 10px;";
  * To select click and swipe with LMB
  * To deselect click outside of selection with LMB
  * To pan click and swipe with RMB
+ * To zoom out click "Fit all" or use key combination "ctrl+a"
+ * To zoom into selection click appropriate button or use key combination "ctrl+s"
  *
  * Data format (json):
  * {
@@ -92,7 +94,7 @@ class ScatterPlot extends Visualization {
 
         // TODO: Visualization selector obfuscates button, so it is now on the bottom, should be on top.
         this.createButtonFitAll(scaleAndAxis, scatter, points, extremesAndDeltas, zoom, box_width);
-        
+
         let selectedZoomBtn = this.createButtonScaleToPoints();
 
         this.addBrushing(box_width, box_height, scatter, scaleAndAxis, selectedZoomBtn, points);
@@ -137,6 +139,7 @@ class ScatterPlot extends Visualization {
     }
 
     addBrushing(box_width, box_height, scatter, scaleAndAxis, selectedZoomBtn, points) {
+        let extent;
         let brush = d3.brush()
             .extent([[0, 0], [box_width, box_height]])
             .on("start brush", updateChart)
@@ -175,8 +178,6 @@ class ScatterPlot extends Visualization {
             }
         };
 
-        var extent;
-
         function updateChart() {
             let s = d3.event.selection;
             selectedZoomBtn.style.display = "inline-block";
@@ -186,10 +187,10 @@ class ScatterPlot extends Visualization {
         }
 
         const endBrushing = function (_) {
+            brushElem.call(brush.move, null);
             selectedZoomBtn.style.display = "none";
             selectedZoomBtn.removeEventListener("click",zoomin,true)
             document.removeEventListener('keydown', zoomInKeyEvent,true);
-            brushElem.call(brush.move, null);
         };
 
         document.addEventListener('click'      , endBrushing,false);
@@ -270,10 +271,10 @@ class ScatterPlot extends Visualization {
     }
 
     getTextWidth(text, font) {
-        var canvas   = document.createElement("canvas");
-        var context  = canvas.getContext("2d");
-        context.font = font;
-        var metrics  = context.measureText("  " + text);
+        const canvas  = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        context.font  = font;
+        const metrics = context.measureText("  " + text);
         return metrics.width;
     }
 
@@ -396,12 +397,12 @@ class ScatterPlot extends Visualization {
     createButtonFitAll(scaleAndAxis, scatter, points, extremesAndDeltas, zoom, box_width) {
         const btn = this.createBtnHelper()
 
-        var text = document.createTextNode("Fit all");
+        let text = document.createTextNode("Fit all");
         btn.appendChild(text);
 
         function unzoom() {
             zoom.zoomElem.transition().duration(0).call(zoom.zoom.transform, d3.zoomIdentity);
-            
+
             let domain_x = [extremesAndDeltas.xMin - extremesAndDeltas.paddingX,
                 extremesAndDeltas.xMax + extremesAndDeltas.paddingX];
             let domain_y = [extremesAndDeltas.yMin - extremesAndDeltas.paddingY,
@@ -429,9 +430,9 @@ class ScatterPlot extends Visualization {
 
         document.addEventListener('keydown', function(event) {
             if (event.ctrlKey && event.key === 'a') {
-              unzoom()
+                unzoom()
             }
-          });
+        });
 
         btn.addEventListener("click",unzoom)
         this.dom.appendChild(btn);
@@ -439,7 +440,7 @@ class ScatterPlot extends Visualization {
 
     createButtonScaleToPoints() {
         const btn = this.createBtnHelper()
-        var text = document.createTextNode("Zoom to selected");
+        let text  = document.createTextNode("Zoom to selected");
         btn.appendChild(text);
         btn.setAttribute("width", "120px");
         btn.style.display = "none";
