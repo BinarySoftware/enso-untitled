@@ -5,9 +5,20 @@ function loadScript(url) {
     document.head.appendChild(script);
 }
 
-loadScript('https://d3js.org/d3.v4.min.js');
+function loadStyle(url) {
+    let style   = document.createElement("link");
+    style.href  = url;
+    style.rel   = "stylesheet";
+    style.media = "screen";
+    style.type  = "text/css";
 
-const label_style = "font-family: dejavuSansMono; font-size: 11px;";
+    document.head.appendChild(style);
+}
+
+loadScript('https://d3js.org/d3.v4.min.js');
+loadStyle('https://fontlibrary.org/face/dejavu-sans-mono')
+
+const label_style = "font-family: DejaVuSansMonoBook; font-size: 10px;";
 
 /**
  * A d3.js ScatterPlot visualization.
@@ -77,12 +88,14 @@ class ScatterPlot extends Visualization {
 
         let scatter = this.createScatter(svg, box_width, box_height, points, dataPoints, scaleAndAxis);
 
-        this.addBrushing(box_width, box_height, scatter, scaleAndAxis);
-
         let zoom = this.addPanAndZoom(box_width, box_height, svg, margin, scaleAndAxis, scatter, points);
 
         // TODO: Visualization selector obfuscates button, so it is now on the bottom, should be on top.
-        this.createButtonFitAll(scaleAndAxis, scatter, points, extremesAndDeltas, zoom);
+        this.createButtonFitAll(scaleAndAxis, scatter, points, extremesAndDeltas, zoom, box_width);
+        
+        let selectedZoomBtn = this.createButtonScaleToPoints();
+
+        this.addBrushing(box_width, box_height, scatter, scaleAndAxis, selectedZoomBtn, points);
     }
 
     addPanAndZoom(box_width, box_height, svg, margin, scaleAndAxis, scatter, points) {
@@ -108,41 +121,81 @@ class ScatterPlot extends Visualization {
             let new_xScale = d3.event.transform.rescaleX(scaleAndAxis.xScale);
             let new_yScale = d3.event.transform.rescaleY(scaleAndAxis.yScale);
 
-            scaleAndAxis.xAxis.call(d3.axisBottom(new_xScale).ticks(7));
-            scaleAndAxis.yAxis.call(d3.axisLeft(new_yScale).ticks(7));
+            scaleAndAxis.xAxis.call(d3.axisBottom(new_xScale).ticks(box_width/30));
+            scaleAndAxis.yAxis.call(d3.axisLeft(new_yScale));
             scatter.selectAll("path")
                 .attr('transform', d => "translate(" + new_xScale(d.x) + "," + new_yScale(d.y) + ")")
 
             if (points.labels === "visible") {
                 scatter.selectAll("text")
-                    .attr('transform', d => "translate(" + new_xScale(d.x) + "," + new_yScale(d.y) + ")")
+                    .attr("x", d => new_xScale(d.x) + 7)
+                    .attr("y", d => new_yScale(d.y) + 2)
             }
         }
 
         return {zoomElem: zoomElem, zoom: zoom};
     }
 
-    addBrushing(box_width, box_height, scatter, scaleAndAxis) {
+    addBrushing(box_width, box_height, scatter, scaleAndAxis, selectedZoomBtn, points) {
         let brush = d3.brush()
             .extent([[0, 0], [box_width, box_height]])
             .on("start brush", updateChart)
 
-        scatter.append("g")
+        let brushElem = scatter.append("g")
             .attr("class", "brush")
             .call(brush)
 
-        function updateChart() {
-            let extent = d3.event.selection
-            scatter.classed("selected", d => isBrushed(extent, scaleAndAxis.xScale(d.x), scaleAndAxis.yScale(d.y) ))
+        function zoomin() {
+            scaleAndAxis.xScale.domain([scaleAndAxis.xScale.invert(extent[0][0]), scaleAndAxis.xScale.invert(extent[1][0])]);
+            scaleAndAxis.yScale.domain([scaleAndAxis.yScale.invert(extent[1][1]), scaleAndAxis.yScale.invert(extent[0][1])]);
+
+            scaleAndAxis.xAxis.transition().duration(1000)
+                .call(d3.axisBottom(scaleAndAxis.xScale).ticks(box_width/30));
+            scaleAndAxis.yAxis.transition().duration(1000)
+                .call(d3.axisLeft(scaleAndAxis.yScale));
+
+            scatter.selectAll("path")
+                .transition().duration(1000)
+                .attr('transform', d => "translate(" + scaleAndAxis.xScale(d.x) + "," + scaleAndAxis.yScale(d.y) + ")")
+
+            if (points.labels === "visible") {
+                scatter.selectAll("text")
+                    .transition().duration(1000)
+                    .attr("x", d => scaleAndAxis.xScale(d.x) + 7)
+                    .attr("y", d => scaleAndAxis.yScale(d.y) + 2)
+            }
+
+            brushElem.call(brush.move, null);
         }
 
-        function isBrushed(brush_coords, cx, cy) {
-            var x0 = brush_coords[0][0],
-                x1 = brush_coords[1][0],
-                y0 = brush_coords[0][1],
-                y1 = brush_coords[1][1];
-            return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+        const zoomInKeyEvent = function (event) {
+            if (event.ctrlKey && event.key === 's') {
+                zoomin();
+                selectedZoomBtn.style.display = "none";
+            }
+        };
+
+        var extent;
+
+        function updateChart() {
+            let s = d3.event.selection;
+            selectedZoomBtn.style.display = "inline-block";
+            selectedZoomBtn.addEventListener("click",zoomin,true)
+            document.addEventListener('keydown', zoomInKeyEvent,true);
+            extent = s;
         }
+
+        const endBrushing = function (_) {
+            selectedZoomBtn.style.display = "none";
+            selectedZoomBtn.removeEventListener("click",zoomin,true)
+            document.removeEventListener('keydown', zoomInKeyEvent,true);
+            brushElem.call(brush.move, null);
+        };
+
+        document.addEventListener('click'      , endBrushing,false);
+        document.addEventListener('auxclick'   , endBrushing,false);
+        document.addEventListener('contextmenu', endBrushing,false);
+        document.addEventListener('scroll'     , endBrushing,false);
     }
 
     createScatter(svg, box_width, box_height, points, dataPoints, scaleAndAxis) {
@@ -172,11 +225,10 @@ class ScatterPlot extends Visualization {
                 else if (d.shape === "star")     { return d3.symbolStar     }
                 else if (d.shape === "triangle") { return d3.symbolTriangle }
                 else                             { return d3.symbolCircle   }
-            }))
+            }).size(d => (d.size || 1.0) * 100))
             .attr('transform', d => "translate(" + scaleAndAxis.xScale(d.x) + "," + scaleAndAxis.yScale(d.y) + ")")
             .style("fill", d => "#" + (d.color || "000000"))
             .style("opacity", 0.5)
-            .size(d => 10 * d.size)
 
         if (points.labels === "visible") {
             scatter.selectAll("dataPoint")
@@ -184,7 +236,8 @@ class ScatterPlot extends Visualization {
                 .enter()
                 .append("text")
                 .text(d => d.label)
-                .attr('transform', d => "translate(" + scaleAndAxis.xScale(d.x) + "," + scaleAndAxis.yScale(d.y) + ")")
+                .attr("x", d => scaleAndAxis.xScale(d.x) + 7)
+                .attr("y", d => scaleAndAxis.yScale(d.y) + 2)
                 .attr("style", label_style)
                 .attr("fill", "black");
         }
@@ -198,22 +251,30 @@ class ScatterPlot extends Visualization {
             svg.append("text")
                 .attr("text-anchor", "end")
                 .attr("style", label_style)
-                .attr("x", box_width / 2 + margin.left)
+                .attr("x", margin.left + (this.getTextWidth(axis.x.label, "10px DejaVuSansMonoBook") / 2))
                 .attr("y", box_height + margin.top + padding_y)
                 .text(axis.x.label);
         }
 
         if (axis.y.label !== undefined) {
             let padding_x = 30;
-            let padding_y = 10;
+            let padding_y = 15;
             svg.append("text")
                 .attr("text-anchor", "end")
                 .attr("style", label_style)
                 .attr("transform", "rotate(-90)")
                 .attr("y", -margin.left + padding_y)
-                .attr("x", -margin.top - box_height / 2 + padding_x)
+                .attr("x", -margin.top - (box_height/2) + (this.getTextWidth(axis.y.label, "10px DejaVuSansMonoBook") / 2))
                 .text(axis.y.label);
         }
+    }
+
+    getTextWidth(text, font) {
+        var canvas   = document.createElement("canvas");
+        var context  = canvas.getContext("2d");
+        context.font = font;
+        var metrics  = context.measureText("  " + text);
+        return metrics.width;
     }
 
     createAxes(axis, extremesAndDeltas, box_width, box_height, svg, focus) {
@@ -225,13 +286,15 @@ class ScatterPlot extends Visualization {
         xScale.domain(domain_x).range([0, box_width]);
         let xAxis = svg.append("g")
             .attr("transform", "translate(0," + box_height + ")")
-            .call(d3.axisBottom(xScale).ticks(7))
+            .attr("style", label_style)
+            .call(d3.axisBottom(xScale).ticks(box_width/30))
 
         let yScale = d3.scaleLinear()
         if (axis.y.scale !== "linear") { yScale = d3.scaleLog(); }
 
         yScale.domain(domain_y).range([box_height, 0]);
         let yAxis = svg.append("g")
+            .attr("style", label_style)
             .call(d3.axisLeft(yScale));
         return {xScale: xScale, yScale: yScale, xAxis: xAxis, yAxis: yAxis};
     }
@@ -277,13 +340,13 @@ class ScatterPlot extends Visualization {
 
     getMargins(axis) {
         if (axis.x.label === undefined && axis.y.label === undefined) {
-            return {top: 20, right: 20, bottom: 20, left: 30};
+            return {top: 20, right: 20, bottom: 20, left: 45};
         } else if (axis.x.label === undefined) {
-            return {top: 10, right: 20, bottom: 35, left: 20};
+            return {top: 10, right: 20, bottom: 35, left: 35};
         } else if (axis.y.label === undefined) {
-            return {top: 20, right: 10, bottom: 20, left: 40};
+            return {top: 20, right: 10, bottom: 20, left: 60};
         }
-        return {top: 10, right: 10, bottom: 35, left: 40};
+        return {top: 10, right: 10, bottom: 35, left: 60};
     }
 
     createDivElem(width, height) {
@@ -297,7 +360,7 @@ class ScatterPlot extends Visualization {
         return divElem;
     }
 
-    createButtonFitAll(scaleAndAxis, scatter, points, extremesAndDeltas, zoom) {
+    createBtnHelper() {
         const btn = document.createElement("button");
         const style = `
             margin-left: 5px; 
@@ -327,6 +390,12 @@ class ScatterPlot extends Visualization {
             btn.style.color = "#333";
         }
 
+        return btn
+    }
+
+    createButtonFitAll(scaleAndAxis, scatter, points, extremesAndDeltas, zoom, box_width) {
+        const btn = this.createBtnHelper()
+
         var text = document.createTextNode("Fit all");
         btn.appendChild(text);
 
@@ -342,7 +411,7 @@ class ScatterPlot extends Visualization {
             scaleAndAxis.yScale.domain(domain_y);
 
             scaleAndAxis.xAxis.transition().duration(1000)
-                .call(d3.axisBottom(scaleAndAxis.xScale).ticks(7));
+                .call(d3.axisBottom(scaleAndAxis.xScale).ticks(box_width/30));
             scaleAndAxis.yAxis.transition().duration(1000)
                 .call(d3.axisLeft(scaleAndAxis.yScale));
 
@@ -353,12 +422,29 @@ class ScatterPlot extends Visualization {
             if (points.labels === "visible") {
                 scatter.selectAll("text")
                     .transition().duration(1000)
-                    .attr('transform', d => "translate(" + scaleAndAxis.xScale(d.x) + "," + scaleAndAxis.yScale(d.y) + ")")
+                    .attr("x", d => scaleAndAxis.xScale(d.x) + 7)
+                    .attr("y", d => scaleAndAxis.yScale(d.y) + 2)
             }
         }
 
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'a') {
+              unzoom()
+            }
+          });
+
         btn.addEventListener("click",unzoom)
         this.dom.appendChild(btn);
+    }
+
+    createButtonScaleToPoints() {
+        const btn = this.createBtnHelper()
+        var text = document.createTextNode("Zoom to selected");
+        btn.appendChild(text);
+        btn.setAttribute("width", "120px");
+        btn.style.display = "none";
+        this.dom.appendChild(btn);
+        return btn;
     }
 
     setSize(size) {

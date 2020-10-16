@@ -1,7 +1,3 @@
-from Base import all
-import Unnamed.Map
-import Unnamed.Table
-
 ##
   ADDED 2.0
   UPCOMING
@@ -13,27 +9,36 @@ import Unnamed.Table
   ? Information
   `this` is not `that`.
 
-  > Example
-    foo x y = x + y
+  > 
+  Example
+   foo x y = x + y
 main = 
     scatterplotTest = """
         {"axis" : {"x" : { "label" : "x-axis label", "scale" : "linear" }, "y" : { "label" : "y-axis label", "scale" : "linear" }},
         "focus" : { "x" : 0.3, "y" : 0.55, "zoom" : 0.9 },
         "points" : {"labels" : "visible"},
         "data" : [
+            { "x" : 0.1, "y" : 0.7, "label" : "foo", "color" : "ff0000", "shape" : "circle", "size" : 5.0 },
+            { "x" : 0.1, "y" : 0.7, "label" : "foo", "color" : "ffff00", "shape" : "circle", "size" : 2.0 },
+            { "x" : 0.2, "y" : 0.6, "label" : "bar", "color" : "00ff00", "shape" : "square", "size" : 0.5 },
+            { "x" : 0.3, "y" : 0.4, "label" : "baz", "color" : "0000ff", "shape" : "square", "size" : 0.1 },
+            { "x" : 0.5, "y" : 0.4, "label" : "bao", "color" : "f0000f", "shape" : "triangle", "size" : 1.0 }
+        ]}
+
+    scatterplotTestTwo = """
+        {"points" : {"labels" : "visible"},
+        "data" : [
             { "x" : 0.1, "y" : 0.7, "label" : "foo", "color" : "ff0000", "shape" : "circle", "size" : 0.2 },
             { "x" : 0.2, "y" : 0.6, "label" : "bar", "color" : "00ff00", "shape" : "square", "size" : 0.3 },
             { "x" : 0.3, "y" : 0.4, "label" : "baz", "color" : "0000ff", "shape" : "square", "size" : 0.5 },
-            { "x" : 0.5, "y" : 0.4, "label" : "bao", "color" : "f0000f", "shape" : "triangle", "size" : 0.4 }
+            { "x" : 0.5, "y" : 0.4, "label" : "baobaobao", "color" : "f0000f", "shape" : "triangle", "size" : 0.4 }
         ]}
+
     histogramTest = """
         {"axis" : {"x" : { "label" : "s" }, "y" : { "label" : "quantity" }},
         "data" : [
             { "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.1 },{ "x" : 0.2 },{ "x" : 0.3 },{ "x" : 0.3 },{ "x" : 0.3 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.4 },{ "x" : 0.5 },{ "x" : 0.6 },{ "x" : 0.7 }
         ]}
-    
-    Table.tableExample
-    Map.mapExample
 
 
 #### METADATA ####
