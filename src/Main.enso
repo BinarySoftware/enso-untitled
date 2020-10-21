@@ -13,6 +13,10 @@
   Example
    foo x y = x + y
 main = 
+    a = 2
+    b = 3
+    c = a + b
+    
     scatterplotTest = """
         {"axis" : {"x" : { "label" : "x-axis label", "scale" : "linear" }, "y" : { "label" : "y-axis label", "scale" : "linear" }},
         "focus" : { "x" : 0.3, "y" : 0.55, "zoom" : 0.9 },
