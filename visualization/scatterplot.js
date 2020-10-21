@@ -15,10 +15,15 @@ function loadStyle(url) {
     document.head.appendChild(style);
 }
 
+
+
 loadScript('https://d3js.org/d3.v4.min.js');
 loadStyle('https://fontlibrary.org/face/dejavu-sans-mono')
 
-const label_style = "font-family: DejaVuSansMonoBook; font-size: 10px;";
+const label_style   = "font-family: DejaVuSansMonoBook; font-size: 10px;";
+const num_width     = 30;
+const lbl_padding_x = 7;
+const lbl_padding_y = 2;
 
 /**
  * A d3.js ScatterPlot visualization.
@@ -111,21 +116,17 @@ class ScatterPlot extends Visualization {
             .extent([[0, 0], [box_width, box_height]])
             .on("zoom", zoomed);
 
-        let zoomElem = svg.append("rect")
+        let zoomElem = svg.append("g")
             .attr("width", box_width)
             .attr("height", box_height)
             .style("fill", "none")
-            .style("pointer-events", "all")
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+            .style("pointer-events", "auto")
+            .attr('transform', 'translate(' + 0 + ',' + 0 + ')')
             .call(zoom);
 
         function zoomed() {
             let new_xScale = d3.event.transform.rescaleX(scaleAndAxis.xScale);
             let new_yScale = d3.event.transform.rescaleY(scaleAndAxis.yScale);
-
-            let num_width    = 30
-            let lbl_padding_x = 7
-            let lbl_paddiny_y = 2
 
             scaleAndAxis.xAxis.call(d3.axisBottom(new_xScale).ticks(box_width/num_width));
             scaleAndAxis.yAxis.call(d3.axisLeft(new_yScale));
@@ -135,7 +136,7 @@ class ScatterPlot extends Visualization {
             if (points.labels === "visible") {
                 scatter.selectAll("text")
                     .attr("x", d => new_xScale(d.x) + lbl_padding_x)
-                    .attr("y", d => new_yScale(d.y) + lbl_paddiny_y)
+                    .attr("y", d => new_yScale(d.y) + lbl_padding_y)
             }
         }
 
@@ -196,10 +197,6 @@ class ScatterPlot extends Visualization {
     }
 
     zoomingHelper(scaleAndAxis, box_width, scatter, points) {
-        let num_width = 30
-        let lbl_padding_x = 7
-        let lbl_paddiny_y = 2
-
         scaleAndAxis.xAxis.transition().duration(1000)
             .call(d3.axisBottom(scaleAndAxis.xScale).ticks(box_width / num_width));
         scaleAndAxis.yAxis.transition().duration(1000)
@@ -213,7 +210,7 @@ class ScatterPlot extends Visualization {
             scatter.selectAll("text")
                 .transition().duration(1000)
                 .attr("x", d => scaleAndAxis.xScale(d.x) + lbl_padding_x)
-                .attr("y", d => scaleAndAxis.yScale(d.y) + lbl_paddiny_y)
+                .attr("y", d => scaleAndAxis.yScale(d.y) + lbl_padding_y)
         }
     }
 
@@ -257,8 +254,8 @@ class ScatterPlot extends Visualization {
                 .enter()
                 .append("text")
                 .text(d => d.label)
-                .attr("x", d => scaleAndAxis.xScale(d.x) + 7)
-                .attr("y", d => scaleAndAxis.yScale(d.y) + 2)
+                .attr("x", d => scaleAndAxis.xScale(d.x) + lbl_padding_x)
+                .attr("y", d => scaleAndAxis.yScale(d.y) + lbl_padding_y)
                 .attr("style", label_style)
                 .attr("fill", "black");
         }
@@ -304,8 +301,6 @@ class ScatterPlot extends Visualization {
 
         let xScale = d3.scaleLinear();
         if (axis.x.scale !== "linear") { xScale = d3.scaleLog(); }
-
-        let num_width    = 30
 
         xScale.domain(domain_x).range([0, box_width]);
         let xAxis = svg.append("g")
